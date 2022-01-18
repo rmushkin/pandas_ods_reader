@@ -1,3 +1,4 @@
+from locale import atof as localized_atof, getlocale, LC_ALL, setlocale
 from lxml import etree
 
 
@@ -11,6 +12,9 @@ TABLE_CELL_TAG = "table:table-cell"
 TABLE_CELL_TEXT_TAG = "text:p"
 TABLE_CELL_REPEATED_ATTRIB = "number-columns-repeated"
 VALUE_TYPE_ATTRIB = "value-type"
+
+
+setlocale(LC_ALL, getlocale())
 
 
 def get_doc(file_or_path):
@@ -57,7 +61,7 @@ def get_value(cell, parsed=False):
         return None, 0
     value = text.text
     if parsed and is_float(cell):
-        value = float(value)
+        value = localized_atof(value)
     n_repeated = cell.attrib.get(
         f"{{{cell.nsmap[TABLE_KEY]}}}{TABLE_CELL_REPEATED_ATTRIB}"
     )
